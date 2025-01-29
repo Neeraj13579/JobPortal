@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal</title>
+    <script src="https://kit.fontawesome.com/fa717aa378.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+</head>
+
+<body>
+
+    <div id="hero-img">
+        <nav id="nav">
+            <div class="navigation">
+                <div class="logo">
+                    <!-- <img src="./img/favicon.png" alt="Job-portal"> -->
+                    <a href="">
+                        <h2>Job<span>Portal</span></h2>
+                    </a>
+                </div>
+
+                <div class="menu">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="button">
+                    <ul>
+                        {% if user.is_hirer or user.is_jobseeker %}
+                            {% if user.is_hirer %}
+                            <li><a href="#" id="post" class="job-btn">My Post</a></li>
+                            {% endif %}
+
+                            {% if user.is_jobseeker %}
+                            <li><a href="#" id="search" class="job-btn">Search Job</a></li>
+                            {% endif %}
+
+                            <li><a href="{% url 'profile' %}" title="Account" id="account"><i class="fa-regular fa-circle-user"></i>{{user.username}}</a></li>
+
+                        {% else %}
+                            <li><a href="{% url 'register' %}">Sign up</a></li>
+                            <li id="login"><a href="{% url 'login' %}">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+        <section id="home" class="hero container">
+            <div class="hero_content">
+                <div class="para1">
+                    <h1>Find Your Dream <br><span id="job">Job</span> Anyone,<br> Anywhere</h1>
+                </div>
+                <div class="para2">
+                    <p>Jobbly simplifies the hiring process. Directly chatting with verified candidates matched by the
+                    </p>
+                    <p> AI algorithm ensures a simple, quick and effective hiring experience.</p>
+                </div>
+                <div class="hero_button">
+                    <a href="{% url 'home' %}"><button class="btn">Get started</button></a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+    <section id="about" class="aboutUs">
+        {% load static %}
+        <img class="about_img" src='{% static "img/about-us.jpg" %}' alt="About Image">
+        <div class="about_content">
+            <h1><span>About</span> us</h1>
+            <h3>Empowering Careers, Strengthening Communities</h3>
+            <p>
+                At Jobbly , we're not just about finding jobs; we're about building futures and nurturing communities.
+                Our commitment to connecting talent with opportunity is driven by a shared vision of a thriving,
+                empowered society</p>
+            <button class="btn">Read more </button>
+        </div>
+    </section>
+
+    <section id="services">
+        <h2>Our <span>Services</span></h2>
+        <div class="container">
+            <div class="service">
+                <h3>Job Listing and Search</h3>
+                {% load static %}
+                <img src="{% static 'img/service-1.jpg' %}" alt="Service 1">
+                <p>Allow employers to post job listings and job seekers to search for jobs based on various criteria
+                    such as location, industry, experience level, and job type. This is a core service for any job
+                    portal.</p>
+            </div>
+            <div class="service">
+                <h3>Profile Matching and Recommendations</h3>
+                {% load static %}
+                <img src="{% static 'img/service-2.jpg' %}" alt="Service 2">
+                <p>Use algorithms to match job seekers with suitable job listings and vice versa. Provide personalized
+                    job recommendations based on user profiles and preferences.</p>
+            </div>
+            <div class="service">
+                <h3>Job Application Management</h3>
+                {% load static %}
+                <img src='{% static "img/service-3.jpg" %}' alt="Service 3">
+                <p>Help job seekers keep track of the jobs they've applied to by offering an application tracking
+                    system. Include features like application status updates, interview scheduling, and email
+                    notifications.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="contact">
+        <h1><span>Contact</span> Us</h1>
+        {% if success %}
+        <span id="success">{{success}}</span>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" id="name" name="name" placeholder="Enter Your Name" required><br><br>
+
+            <input type="email" id="email" name="email" placeholder="Enter Your Email" required><br><br>
+
+            <input type="text" id="subject" name="subject" placeholder="Enter Subject" required><br><br>
+
+            <textarea id="message" name="message" placeholder="Enter Your Message Here" required></textarea>
+
+            <div>
+                <input type="submit" id="submit" value="Submit">
+                <input type="reset" id="reset" value="Clear">
+            </div>
+        </form>
+        
+
+    </section>
+
+    <footer>
+        <div class="footer_container">
+            <div class="footer_logo">
+                {% load static %}
+                <a href=""><img src='{% static "img/favicon.png" %}' alt="logo"></a>
+            </div>
+            <div class="link_list">
+                <h3>Main Links</h3>
+                <ul>
+                    <li><a href="#">Search Jobs</a></li>
+                    <li><a href="#services">Service</a></li>
+                </ul>
+            </div>
+
+            <div class="link_list">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#">Privecy Policy</a></li>
+                    <li><a href="#">Terms & condition</a></li>
+                </ul>
+            </div>
+
+            <div class="last">
+                <h3>Follow Us</h3>
+                <div class="icon_container">
+                    <div class="icon">
+                        <i class="fa-brands fa-facebook"></i>
+                    </div>
+                    <div class="icon">
+                        <i class="fa-brands fa-twitter"></i>
+                    </div>
+                    <div class="icon">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    <div class="icon">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    {% load static %}
+    <script src='{% static "js/landingPage.js" %}'></script>
+</body>
+
+</html>

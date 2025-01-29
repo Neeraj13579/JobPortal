@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if request.resolver_match.view_name == "view-saved-post" %}
+            My Saved Posts
+        {% else %}
+            My Applied Jobs
+        {% endif %}        
+        | JobPortal</title>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/myPost.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .container{
+            min-height: 45vh;
+        }
+    </style>
+</head>
+
+<body>
+    {% load humanize %}
+    {% include "nav.html"%}
+
+    <div class="container">
+        {% if request.resolver_match.view_name == "view-saved-post" %}
+        <h2>My Saved Posts</h2>
+        {% else %}
+        <h2>My Applied Jobs</h2>            
+        {% endif %}  
+        
+        {% if request.resolver_match.view_name == "view-saved-post" %}
+            {% if not posts %}
+                <span id="noPost">No Post Saved Yet</span>
+                <a href="{% url 'find-job' %}"><button id="job">Find a Job</button></a>            
+            {% endif %}
+        {% endif %}
+
+        {% if posts %}
+            {% for post in posts %}
+            <a class="box-a" href="{% url 'view-post' post.id %}">
+                <div class="box">
+                    <div class="box-head">
+                        <div class="box-title">
+                            <h3 title="Title">{{post.title}}</h3>
+                            <h5 title="Company Name">{{post.hirer.company_name}}</h5>
+                        </div>
+                        <div class="box-img">
+                            <img title="Company Profile Image" src="{{ post.hirer.profile_image.url }}" alt="Company Image">
+                        </div>
+                    </div>
+                    <div class="box-list">
+                        <div class="box-list-top">
+                            <span title="Experience"><i class="fa-solid fa-briefcase"></i> {{post.experience}}</span>
+                            <span title="Salary" class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i>
+                                {{post.salary}}</span>
+                            <span title="Location"><i class="fa-solid fa-location-dot"></i> {{post.location}}</span>
+                        </div>
+                        <div class="box-list-bottom">
+                            <span title="Role Category"><i class="fa-solid fa-newspaper"></i> {{post.role}}</span>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <span class="skills" title="Skills Requirement">{{post.skills_requirement}}</span>
+                    </div>
+                </a>
+                    <div class="box-end">
+                        <span class="posted" title="Posted">{{post.created_at|timesince }} ago</span>
+                        <div class="box-btn">
+                            {% comment %}
+                                {% if post in user_job_seeker.saved_posts.all %}
+                                <a href="{% url 'unsave-post' post.id %}"><span class="unsave"><i
+                                    class="fa-solid fa-bookmark"></i> Unsave</span></a>
+                                    {% else %}
+                                    <a href="{% url 'save-post' post.id %}"><span class="save"><i
+                                        class="fa-regular fa-bookmark"></i> Save</span></a>
+                                {% endif %}
+                            {% endcomment %}
+                            <span data-post-id="{{post.id}}" class="unsave save-unsave-button"><i class="fa-solid fa-bookmark"></i> Unsave</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if request.resolver_match.view_name == "applied-job" %}
+            {% if not job_application %}
+                <span id="noPost">No Applied Job Yet</span>
+                <a href="{% url 'find-job' %}"><button id="job">Find a Job</button></a>
+            {% endif %}
+        {% endif %}
+
+        {% if job_application %}
+            {% for item in job_application %}
+                <a class="box-a" href="{% url 'view-post' item.job_post_id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3 title="Title">{{item.job_post.title}}</h3>
+                                <h5 title="Company Name">{{item.job_post.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img title="Company Profile Image" src="{{ item.job_post.hirer.profile_image.url }}" alt="Company Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span title="Experience"><i class="fa-solid fa-briefcase"></i> {{item.job_post.experience}}</span>
+                                <span title="Salary" class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i>
+                                    {{item.job_post.salary}}</span>
+                                <span title="Location"><i class="fa-solid fa-location-dot"></i> {{item.job_post.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span title="Role Category"><i class="fa-solid fa-newspaper"></i> {{item.job_post.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills" title="Skills Requirement">{{item.job_post.skills_requirement}}</span>
+                        </div>
+                    </a>
+                        <div class="box-end">
+                            <span class="posted" title="Posted">{{item.job_post.created_at|timesince }} ago</span>                             
+                            <div class="box-btn">
+                                {% comment %}                                  
+                                    {% if item.job_post in saved_post %}
+                                    <a href="{% url 'unsave-post' item.job_post_id %}"><span class="unsave"><i
+                                                class="fa-solid fa-bookmark"></i> Unsave</span></a>
+                                    {% else %}
+                                    <a href="{% url 'save-post' item.job_post_id %}"><span class="save"><i
+                                        class="fa-regular fa-bookmark"></i> Save</span></a>
+                                    {% endif %}
+                                {% endcomment %}
+                                {% if item.job_post in saved_post %}
+                                    <span data-post-id="{{item.id}}" class="unsave save-unsave-button"><i class="fa-solid fa-bookmark"></i> Unsave</span>
+                                {% else %}
+                                    <span data-post-id="{{item.id}}" class="save save-unsave-button"><i class="fa-regular fa-bookmark"></i> Save</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+    {% include "footer.html" %}
+
+
+    {% load static %}
+    <script src="{% static 'js/savedNappliedPosts.js' %}"></script>
+</body>
+
+</html>

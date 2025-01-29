@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs | JobPortal</title>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/findJob.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    {% include "searchBox.html" %}
+
+    <div class="container">
+        <div class="filter">
+            <form id="myForm" method="GET" action="{% url 'find-job' %}">
+                {% csrf_token %}
+                <h2>All Filters</h2>
+
+                <hr>
+
+                <div class="employee-type box-filter">
+                    <div class="box-filter-head">
+                        <h3>Employee Type</h3>
+                        <span id="emp-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div class="employee-type-content">
+                        {% for etype in employee_types %}
+                        <div class="employee-type-box">
+                            <input type="checkbox" {% if etype.employee_type in selected_employee_types %}
+                              checked
+                            {% endif %} value="{{etype.employee_type}}" name="employee-type"
+                                id="{{etype.employee_type}}">
+                            <label for="{{etype.employee_type}}">{{etype.employee_type}}
+                                <span>({{etype.count_emp}})</span></label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="experience box-filter">
+                    <div class="box-filter-head">
+                        <h3>Experience</h3>
+                        <span id="exp-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div class="experience-content">
+                        {% for exps in experiences %}
+                        <div class="experience-box">
+                            <input {% if exps.experience in selected_experiences %}
+                              checked
+                            {% endif %} type="checkbox" value="{{exps.experience}}" name="experience" id="{{exps.experience}}">
+                            <label for="{{exps.experience}}">{{exps.experience}}
+                                <span>({{exps.count_exp}})</span></label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="department box-filter">
+                    <div class="department box-filter-head">
+                        <h3>Department</h3>
+                        <span id="dept-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div class="top-department-content">
+                        {% for dept in top_departments %}
+                        <div class="department-box">
+                            <input {% if dept.department in selected_departments %}
+                                checked
+                            {% endif %} type="checkbox" value="{{dept.department}}" name="department" id="{{dept.department}}">
+                            <label for="{{dept.department}}">{{dept.department}}
+                                <span>({{dept.count_dept}})</span></label>
+                        </div>
+                        {% endfor %}
+                        {% if remaining_departments %}
+                        <span id="dept-view-all">view all</span>
+                        {% endif %}
+                        <div id="all-department-content">
+                            {% for allDept in remaining_departments %}
+                            <div class="reamaining-department-box">
+                                <input {% if allDept.department in selected_departments %}
+                                  checked
+                                {% endif %} type="checkbox" value="{{allDept.department}}" name="department" id="{{allDept.department}}">
+                                <label for="{{allDept.department}}">{{allDept.department}}
+                                    <span>({{allDept.count_dept}})</span></label>
+                            </div>
+                            {% endfor %}
+                            <span id="dept-view-less">view less</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="location box-filter">
+                    <div class="box-filter-head">
+                        <h3>Location</h3>
+                        <span id="loc-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div id="top-location-content">
+                        {% for loc in top_locations %}
+                        <div class="location-box">
+                            <input {% if loc.location in selected_locations %}
+                              checked
+                            {% endif %} type="checkbox" value="{{loc.location}}" name="location" id="{{loc.location}}">
+                            <label for="{{loc.location}}">{{loc.location}} <span>({{loc.count_loc}})</span></label>
+                        </div>
+                        {% endfor %}
+                        {% if remaining_locations %}
+                        <span id="loc-view-all">view all</span>
+                        {% endif %}
+                    </div>
+                    <div id="all-location-content">
+                        {% for allLoc in remaining_locations %}
+                        <div class="remaining-location-box">
+                            <input {% if allLoc.location in selected_locations %}
+                              checked
+                            {% endif %} type="checkbox" value="{{allLoc.location}}" name="location" id="{{allLoc.location}}">
+                            <label
+                                for="{{allLoc.location}}">{{allLoc.location}}<span>({{allLoc.count_loc}})</span></label>
+                        </div>
+                        {% endfor %}
+                        <span id="loc-view-less">view less</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="salary box-filter">
+                    <div class="box-filter-head">
+                        <h3>Salary</h3>
+                        <span id="sly-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div class="salary-content">
+                        <div class="salary-box">
+                            <input {% if 0 in selected_salary %}
+                              checked
+                            {% endif %} type="checkbox" value="0" name="salary" id="0-3Lakhs">
+                            <label for="0-3Lakhs">0-3 Lakhs <span>({{salary_counts.threeL}})</span></label>
+                        </div>
+                        <div class="salary-box">
+                            <input {% if 300000 in selected_salary %}
+                              checked
+                            {% endif %} type="checkbox" value="300000" name="salary" id="sixL">
+                            <label for="sixL">3-6 Lakhs <span>({{salary_counts.sixL}})</span></label>
+                        </div>
+                        <div class="salary-box">
+                            <input {% if 600000 in selected_salary %}
+                              checked
+                            {% endif %} type="checkbox" value="600000" name="salary" id="tenL">
+                            <label for="tenL">6-10 Lakhs <span>({{salary_counts.tenL}})</span></label>
+                        </div>
+                        <div class="salary-box">
+                            <input {% if 1000000 in selected_salary %}
+                              checked
+                            {% endif %} type="checkbox" value="1000000" name="salary" id="fiviteenL">
+                            <label for="fiviteenL">10-15 Lakhs <span>({{salary_counts.fiviteenL}})</span></label>
+                        </div>
+                        <div class="salary-box">
+                            <input {% if 1500000 in selected_salary %}
+                              checked
+                            {% endif %} type="checkbox" value="1500000" name="salary" id="fiviteenPlusL">
+                            <label for="fiviteenPlusL">15+ Lakhs <span>({{salary_counts.fiviteenPlusL}})</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="role box-filter">
+                    <div class="box-filter-head">
+                        <h3>Role Category</h3>
+                        <span id="role-angle-down"><i class="fa-solid fa-angle-down"></i></span>
+                    </div>
+                    <div id="top-role-content">
+                        {% for role in top_roles %}
+                        <div class="role-box">
+                            <input {% if role.role in selected_role %}
+                              checked
+                            {% endif %} type="checkbox" value="{{role.role}}" name="role" id="role-{{role.role}}">
+                            <label for="role-{{role.role}}">{{role.role}} <span>({{role.count_role}})</span></label>
+                        </div>
+                        {% endfor %}
+                        {% if remaining_roles %}
+                        <span id="role-view-all">view all</span>
+                        {% endif %}
+                    </div>
+                    <div id="all-role-content">
+                        {% for allRole in remaining_roles %}
+                        <div class="remaining-role-box">
+                            <input {% if allRole.role in selected_role %}
+                              checked
+                            {% endif %} type="checkbox" value="{{allRole.role}}" name="role" id="{{allRole.role}}">
+                            <label for="{{allRole.role}}">{{allRole.role}} <span>({{allRole.count_role}})</span></label>
+                        </div>
+                        {% endfor %}
+                        <span id="role-view-less">view less</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="freshness box-filter">
+                    <h3>Freshness</h3>
+                    <div class="freshness-content">
+                        <select name="freshness" id="freshness" >
+                            <option selected disabled>All</option>
+                            <option {% if freshness == 1 %}
+                              selected
+                            {% endif %} value="1">Last 1 Day</option>
+                            <option {% if freshness == 3 %}
+                              selected
+                            {% endif %} value="3">Last 3 Days</option>
+                            <option {% if freshness == 7 %}
+                              selected
+                            {% endif %} value="7">Last 7 Days</option>
+                            <option {% if freshness == 15 %}
+                              selected
+                            {% endif %} value="15">Last 15 Days</option>
+                            <option {% if freshness == 30 %}
+                              selected
+                            {% endif %} value="30">Last 30 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" id="filterSubmit" hidden>Submit</button>
+            </form>
+        </div>
+
+        {% if filtered_employee_posts %}
+            {% for emp in filtered_employee_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' emp.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{emp.title}}</h3>
+                                <h5>{{emp.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{emp.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{emp.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{emp.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{emp.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{emp.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{emp.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{emp.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if emp in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' emp.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' emp.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if emp in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{emp.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{emp.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_experience_posts %}
+            {% for exp in filtered_experience_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' exp.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{exp.title}}</h3>
+                                <h5>{{exp.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{exp.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{exp.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{exp.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{exp.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{exp.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{exp.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{exp.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if exp in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' exp.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' exp.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if exp in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{exp.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{exp.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_department_posts %}
+            {% for dept in filtered_department_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' dept.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{dept.title}}</h3>
+                                <h5>{{dept.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{dept.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{dept.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{dept.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{dept.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{dept.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{dept.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{dept.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if dept in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' dept.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' dept.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if dept in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{dept.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{dept.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_location_posts %}
+            {% for loc in filtered_location_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' loc.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{loc.title}}</h3>
+                                <h5>{{loc.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{loc.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{loc.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{loc.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{loc.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{loc.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{loc.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{loc.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if loc in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' loc.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' loc.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if loc in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{loc.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{loc.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_salary_posts %}
+            {% for sly in filtered_salary_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' sly.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{sly.title}}</h3>
+                                <h5>{{sly.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{sly.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{sly.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{sly.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{sly.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{sly.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{sly.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{sly.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if sly in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' sly.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' sly.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if sly in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{sly.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{sly.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_role_posts %}
+            {% for role in filtered_role_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' role.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{role.title}}</h3>
+                                <h5>{{role.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{role.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{role.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{role.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{role.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{role.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{role.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{role.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if role in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' role.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' role.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if role in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{role.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{role.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if filtered_freshiness_posts %}
+            {% for fresh in filtered_freshiness_posts %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' fresh.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{fresh.title}}</h3>
+                                <h5>{{fresh.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{fresh.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{fresh.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{fresh.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{fresh.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{fresh.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{fresh.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{fresh.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if fresh in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' fresh.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' fresh.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if fresh in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{fresh.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{fresh.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if searchResults %}
+            {% for sere in searchResults %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' sere.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{sere.title}}</h3>
+                                <h5>{{sere.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{sere.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{sere.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{sere.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{sere.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{sere.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{sere.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{sere.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if sere in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' sere.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' sere.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if sere in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{sere.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{sere.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if companyNameSearch %}
+            {% for cnase in companyNameSearch %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' cnase.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{cnase.title}}</h3>
+                                <h5>{{cnase.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{cnase.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{cnase.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{cnase.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{cnase.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{cnase.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{cnase.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{cnase.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if cnase in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' cnase.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' cnase.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if cnase in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{cnase.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{cnase.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if searchExperienceResults %}
+            {% for seexpre in searchExperienceResults %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' seexpre.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{seexpre.title}}</h3>
+                                <h5>{{seexpre.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{seexpre.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{seexpre.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{seexpre.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{seexpre.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{seexpre.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{seexpre.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{seexpre.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if seexpre in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' seexpre.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' seexpre.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if seexpre in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{seexpre.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{seexpre.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if searchLocationResults %}
+            {% for selocre in searchLocationResults %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' selocre.id %}">
+                    <div class="box">
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{selocre.title}}</h3>
+                                <h5>{{selocre.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{selocre.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{selocre.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{selocre.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{selocre.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{selocre.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{selocre.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{selocre.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if selocre in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' selocre.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' selocre.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if selocre in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{selocre.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{selocre.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if is_filter == False %}
+        {% for recom in recommended_jobs %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' recom.id %}">
+                    <div class="box">
+                        <span class="text-recommend"><i class="fa-solid fa-star"></i> Recommended Job</span>
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{recom.title}}</h3>
+                                <h5>{{recom.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{recom.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{recom.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{recom.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{recom.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{recom.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{recom.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{recom.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if recom in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' recom.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' recom.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if recom in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{recom.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{recom.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if is_filter == False %}          
+            {% for post in posts %}
+                <div class="hero-box">
+                    <a href="{% url 'view-post' post.id %}">
+                        <div class="box">
+                            <div class="box-head">
+                                <div class="box-title">
+                                    <h3>{{post.title}}</h3>
+                                    <h5>{{post.hirer.company_name}}</h5>
+                                </div>
+                                <div class="box-img">
+                                    <img src="{{post.hirer.profile_image.url}}" alt="Compnay Image">
+                                </div>
+                            </div>
+                            <div class="box-list">
+                                <div class="box-list-top">
+                                    <span><i class="fa-solid fa-briefcase"></i> {{post.experience}}</span>
+                                    <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{post.salary}}</span>
+                                    <span><i class="fa-solid fa-location-dot"></i> {{post.location}}</span>
+                                </div>
+                                <div class="box-list-bottom">
+                                    <span><i class="fa-solid fa-newspaper"></i> {{post.role}}</span>
+                                </div>
+                            </div>
+                            <div class="box-content">
+                                <span class="skills">{{post.skills_requirement}}</span>
+                            </div>
+                    </a>
+                    <div class="box-end">
+                        <span>{{post.created_at|timesince }} ago</span>
+                        <div class="box-btn">
+                            {% comment %}
+                            {% if post in user_job_seeker.saved_posts.all %}
+                            <a href="{% url 'unsave-post' post.id %}"><span class="unsave"><i class="fa-solid fa-bookmark"></i>
+                                    Unsave</span></a>
+                            {% else %}
+                            <a href="{% url 'save-post' post.id %}"><span class="save"><i class="fa-regular fa-bookmark"></i>
+                                    Save</span></a>
+                            {% endif %}
+                            {% endcomment %}
+                            {% if post in user_job_seeker.saved_posts.all %}
+                            <span data-post-id="{{post.id}}" class="unsave save-unsave-button"><i
+                                    class="fa-solid fa-bookmark"></i>
+                                Unsave</span>
+                            {% else %}
+                            <span data-post-id="{{post.id}}" class="save save-unsave-button"><i
+                                    class="fa-regular fa-bookmark"></i>
+                                Save</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if is_filter == 'run' and not posts %}
+            <div class="noData">
+                <h3>No Data Available!!!</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    
+    {% load static %}
+    <script src='{% static "js/findJob.js" %}'></script>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Croissant+One&family=Roboto&family=Ubuntu&display=swap');
+/* font-family: 'Croissant One', cursive; */
+/* font-family: 'Roboto', sans-serif; */
+/* font-family: 'Ubuntu', sans-serif; */
+
+
+#hirerAddressData,
+#hirerCompanyDetailData,
+#hirerSocialData {
+    display: none;
+}
+
+
+.container {
+    font-family: 'Roboto', sans-serif;
+}
+
+tr th {
+    width: 200px;
+}
+
+textarea {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    width: 100%;
+    resize: vertical;
+}
+
+.social-media {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.social-media a {
+    text-decoration: none;
+}
+.social-media a i{
+    font-size: 2rem;
+}
+.social-media #facebook {
+    color: #3975EA;
+    transition: color 500ms ease-in-out;
+}
+.social-media #facebook:hover{
+    color: #1160ff;
+}
+
+.social-media #linkedin {
+    color: #2D64BC;
+    transition: color 500ms ease-in-out;
+}
+.social-media #linkedin:hover{
+    color: #1655b9;
+}
+
+.social-media #twitter {
+    color: #4A99E9;            
+    transition: color 500ms ease-in-out;
+}
+.social-media #twitter:hover{
+    color: #157be0;
+}

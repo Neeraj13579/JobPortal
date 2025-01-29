@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/createPost.css' %}">
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    {% if percentage_user != 100 %}
+        <div class="msg">
+            <div class="msg-content">
+                <h3>Alert!</h3>
+                <h4>Complete your profile to 100% or post will not posted.</h4>
+                <a href="{% url 'profile' %}"><button>Complete Profile</button></a>
+            </div>
+        </div>      
+    {% endif %}
+
+    <form method="post">
+        <h2>Post a Job</h2>
+        {% csrf_token %}
+            {{ form.as_p }}
+        <div class="btn">
+            <button type="submit" id="submit" {% if percentage_user != 100 %}
+                disabled
+            {% endif %}>Post</button>
+            <button type="reset" id="clear">Clear</button>
+        </div>
+    </form>
+    
+    {% include "footer.html" %}
+
+    <script>
+        let skills = document.getElementById('id_skills_requirement');
+        let jobPurpose = document.getElementById('id_job_purpose');
+        let jobHighlights = document.getElementById('id_job_highlights');
+
+        skills.setAttribute('placeholder', 'Enter Skills Separated by "," (comma) only!')
+        jobPurpose.setAttribute('placeholder', "Don't forget to add fullstop ' . ' so that we can add bullets.")
+        jobHighlights.setAttribute('placeholder', "Don't forget to add fullstop ' . ' so that we can add bullets.")
+    </script>
+</body>
+
+</html>

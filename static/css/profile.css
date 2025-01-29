@@ -1,0 +1,64 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    background-color: azure;
+    border-radius: 12px;
+    width: 30%;
+    margin: 0 auto;
+}
+
+.container h1{
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.container .item{
+    display: flex;
+    font-size: 1.2rem;
+    padding: 0 20px;
+    padding: 15px;
+}
+
+.container .item input{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+
+.container .btn{
+    display: flex;
+    justify-content: space-around;
+    padding: 18px;
+}
+
+.container .btn button{
+    padding: 6px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: rgb(95, 95, 235);
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+}
+
+.container .btn a button{
+    color: white;
+    text-decoration: none;
+}

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{post.title}} | {{post.hirer.company_name}} | JobPortal</title>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/postView.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    {% include "nav.html"%}
+    <div class="container">
+        <div class="background-blur"></div>
+        <div class="container-content-one">
+            <div class="box">
+                <div class="box-head">
+                    <div class="box-title">
+                        <h3>{{post.title}}</h3>
+                        <h5>{{post.hirer.company_name}}</h5>
+                    </div>
+                    <div class="box-img">
+                        <img src="{{ post.hirer.profile_image.url }}" alt="Compnay Image">
+                    </div>
+                </div>
+                <div class="box-list">
+                    <div class="box-list-top">
+                        <span><i class="fa-solid fa-briefcase"></i> {{post.experience}}</span>
+                        <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{post.salary}}</span>
+                    </div>
+                    <div class="box-list-bottom">
+                        <span><i class="fa-solid fa-location-dot"></i> {{post.location}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="box-end">
+                    <div class="box-end-info">
+                        <span>Posted: <p>{{post.created_at|timesince }} ago</p></span>
+                        <span>Intake: <p>{{post.intake }}</p></span><br>
+                    </div>
+                    {% if request.user.is_jobseeker %}
+                    <div class="box-btn">
+                        {% comment %}                          
+                            {% if post in user_job_seeker.saved_posts.all %}
+                            <a href="{% url 'unsave-post' post.id %}"><button class="save"><i
+                                        class="fa-solid fa-bookmark"></i> Unsave</button></a>
+                            {% else %}
+                            <a href="{% url 'save-post' post.id %}"><button class="save"><i
+                                        class="fa-regular fa-bookmark"></i> Save</button></a>
+                            {% endif %}
+                        {% endcomment %}
+                        
+                        {% if post in user_job_seeker.saved_posts.all %}
+                            <button data-post-id="{{post.id}}" class="unsave save-unsave-button"><i class="fa-solid fa-bookmark"></i> Unsave</button>
+                        {% else %}
+                            <button data-post-id="{{post.id}}" class="save save-unsave-button"><i class="fa-regular fa-bookmark"></i> Save</button>
+                        {% endif %}
+
+
+                        {% if not has_applied %}
+                        <button class="apply" value="Apply">Apply</button>
+                        {% endif %}
+                        {% if has_applied %}
+                        <button class="applied" value="Apply">Applied</button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if request.user == post.hirer.user %}
+                    <div class="box-btn">
+                        <a href="{% url 'update-post' post.id %}"><button class="edit">Edit</button></a>
+                        <button class="delete">Delete</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% include "deleteAlert.html" %}
+            <div class="box-two">
+                <div class="box-two-content">
+                    <h2>Job Description</h2>
+                    <div class="job-purpose">
+                        <h3>Job Purpose:</h3>
+                        <ul>
+                            {% for item in purposeDatas %}
+                            <li>{{item}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="box-two-content">
+                    <span>Experience: </span>
+                    <p>{{post.experience}}</p>
+                </div>
+                <div class="box-two-content">
+                    <span>Role Category: </span>
+                    <p>{{post.role}}</p>
+                </div>
+                <div class="box-two-content">
+                    <span>Industry Type: </span>
+                    <p>{{post.industry_type}}</p>
+                </div>
+                <div class="box-two-content">
+                    <span>Department: </span>
+                    <p>{{post.department}}</p>
+                </div>
+                <div class="box-two-content">
+                    <span>Employment Type: </span>
+                    <p>{{post.employee_type}}</p>
+                </div>
+                <div class="box-two-content">
+                    <span>Education: </span>
+                    <p>{{post.education}}</p>
+                </div>
+
+                {% if social_media %}
+                <hr>
+                <div class="social-media">
+                    {% if social_media.facebook_url %}
+                    <a href="{{social_media.facebook_url}}" id="facebook" target="_blank"><i
+                            class="fa-brands fa-square-facebook"></i></a>
+                    {% endif %}
+                    {% if social_media.linkedin_url %}
+                    <a href="{{social_media.linkedin_url}}" id="linkedin" target="_blank"><i
+                            class="fa-brands fa-linkedin" target="_blank"></i></a>
+                    {% endif %}
+                    {% if social_media.twitter_url %}
+                    <a href="{{social_media.twitter_url}}" id="twitter" target="_blank"><i class="fa-brands fa-twitter"
+                            target="_blank"></i></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="box-four">
+                {% if not aboutData is None %}
+                <div class="about-company">
+                    <h3>About Company</h3>
+                    <p>{{aboutData|safe}}</p>
+                </div>
+                {% endif %}
+                {% if company_address %}
+                <div class="company-address">
+                    <h3>Company Address</h3>
+                    <p>{{company_address.street_address}}, {{company_address.city}}, {{company_address.state}},
+                        {{company_address.postal_code}}, {{company_address.country}}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container-content-two">
+            {% if message is not None %}
+                <div class="box-seven">
+                    <h4>{{message}}</h4>
+                    <a href="{% url 'profile' %}"><button>Complete Profile</button></a>
+                </div>
+            {% endif %}
+
+            <div class="box-three">
+                <div class="job-highlight">
+                    <h3>Job Highlights</h3>
+                    <div class="content-job-highlight">
+                        <ul>
+                            {% for item in highlightDatas %}
+                            <li>{{item}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="skills-required">
+                    <h3>Skills Required</h3>
+                    <div class="content-skills-required">
+                        {% for item in skills %}
+                        <div>{{item}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+            {% if request.user.is_hirer %}
+            <div class="box-five">
+                <div class="response-main-box">
+                    <h3>Responses</h3>
+                    <button id="response"><i class="fa-solid fa-eye"></i> View Responses</button>
+                </div>
+            </div>
+
+            <div class="response-container" id="response-container">
+                <div class="response-heading">
+                    <h3>Responses For {{post.title}}</h3>
+                    <div class="cross" id="cross">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                </div>
+                <div class="response-content">
+                    <table>
+                        {% if job_application %}
+                        <div class="response-box heading">
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Applicant Name</th>
+                                <th>Email ID</th>
+                                <th>Resume</th>
+                                <th>Your Response</th>
+                            </tr>
+                        </div>
+                        {% endif %}
+                        <!-- for loop here -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for item in job_application %}
+                            <div class="response-box">
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><a href="{% url 'view_profile' item.applicant.user %}"
+                                            target="_blank">{{item.applicant.user.name}}</a></td>
+                                    <td><a href="mailto:{{item.applicant.user.email}}"
+                                            target="_blank">{{item.applicant.user.email}}</a></td>
+                                    {% if item.applicant.resume %}
+                                    <td><a href="{{item.applicant.resume.url}}" target="_blank">view resume</a></td>
+                                    {% else %}
+                                    <td>No Resume Uploaded!</td>
+                                    {% endif %}
+                                    <td><select name="myResponse-{{item.id}}" class="myResponse">
+                                            <option value="None" selected>None</option>
+                                            <option value="Interested" {% if item.response == "Interested" %}selected{% endif %}>Interested</option>
+                                            <option value="Rejected" {% if item.response == "Rejected" %}selected{% endif %}>Rejected</option>
+                                            <option value="Shortlisted" {% if item.response == "Shortlisted" %}selected{% endif %}>Shortlisted</option>
+                                            <option value="Not Selected" {% if item.response == "Not Selected" %}selected{% endif %}>Not Selected</option>
+                                            <option value="Interview Invitation" {% if item.response == "Interview Invitation" %}selected{% endif %}>Interview Invitation</option>
+                                            <option value="On-Hold" {% if item.response == "On-Hold" %}selected{% endif %}>On-Hold</option>
+                                            <option value="Pending Review" {% if item.response == "Pending Review" %}selected{% endif %}>Pending Review</option>
+                                            <option value="Overqualified" {% if item.response == "Overqualified" %}selected{% endif %}>Overqualified</option>
+                                            <option value="Underqualified" {% if item.response == "Underqualified" %}selected{% endif %}>Underqualified</option>
+                                            <option value="Selected for Second Round" {% if item.response == "Selected for Second Round" %}selected{% endif %}>Selected for Second Round</option>
+                                            <option value="No Longer Hiring" {% if item.response == "No Longer Hiring" %}selected{% endif %}>No Longer Hiring</option>
+                                            <option value="Considered for Future Opportunities" {% if item.response == "Considered for Future Opportunities" %}selected{% endif %}>Considered for Future Opportunities</option>
+                                        </select></td>
+                                </tr>
+                            </div>
+                            {% endfor %}
+                            <button id="mainSubmit" type="submit" hidden>Submit</button>
+                        </form>
+                    </table>
+                    {% if not job_application %}
+                    <div class="response-box">
+                        <p>No Responses Yet</p>
+                    </div>
+                    {% else %}
+                    <div class="btn">
+                        <button id="print">Print</button>
+                        <button type="submit" id="dummeSubmit">Submit Responses</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if request.user.is_jobseeker and has_applied %}
+                {% for item in user_job_seeker_application %}
+                <div class="box-six"
+                {% if item.response == 'Interested' or item.response == 'Shortlisted' or item.response == 'Interview Invitation' or item.response == 'Selected for Second Round' %}
+                    style="background-color: rgba(93, 255, 82, 0.688); border: 2px solid yellow;"
+                    {% elif item.response == 'Rejected' or item.response == 'Not Selected' or item.response == 'Underqualified' %}
+                    style="background-color: rgba(255, 73, 73, 0.71); border: 2px solid orange;"
+                    {% elif item.response == 'On-Hold' or item.response == 'Overqualified' or item.response == 'No Longer Hiring' or item.response == 'Considered for Future Opportunities' %}
+                    style="background-color: rgba(255, 190, 69, 0.804); border: 2px solid orange;"
+                    {% endif %}>
+                    <div class="response-main-box">
+                        <h3>Response from {{post.hirer.company_name}}</h3>
+                            {% if item.response is None or item.response == 'None' or item.response == 'Pending Review' %}
+                                <span class="response-text"><i class="fa-solid fa-clock"></i> Your application is under review</span>
+                            {% elif item.response == 'Interested' or item.response == 'Shortlisted' or item.response == 'Interview Invitation' or item.response == 'Selected for Second Round' or item.response == 'Considered for Future Opportunities' %}
+                                <span class="response-text">Hurray! {{post.hirer.company_name}} has {{item.response}} to your application. Be in touch with mail inbox, I am sure they will contact you.</span>
+                            {% elif item.response == 'Rejected' or item.response == 'Not Selected' %}
+                                <span class="response-text">Oh no! {{post.hirer.company_name}} {{item.response}} your application. Don't worry try again and apply another job.</span>
+                            {% elif item.response == 'On-Hold' %}
+                                <span class="response-text">{{post.hirer.company_name}} putted your application on {{item.response}}. Till then try to another job apllications.</span>
+                            {% elif item.response == 'Overqualified' or item.response == 'Underqualified' %}
+                                <span class="response-text">{{post.hirer.company_name}} responsed your education is {{item.response}} for this job. Don't worry try another jobs.</span>
+                            {% elif item.response == 'No Longer Hiring' %}
+                                <span class="response-text">{{post.hirer.company_name}} is {{item.response}}. Don't worry try another jobs.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+    {% include "applyJobAlert.html" %}
+
+
+    {% include "footer.html" %}
+
+
+    <script src="{% static 'js/postView.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <title>Hirer Registration</title>
+  {% load static %}
+  <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+  <style>
+    body {
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body class="vh-100 d-flex align-items-center">
+
+  <section class="w-100 mt-5 mb-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-header text-black">
+              <h2>Hirer Register</h2>
+            </div>
+            <div class="card-body">
+              <form action="{% url 'hirer_register' %}" method="POST" novalidate>
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                <div class="form-group">
+                  {{ field.label_tag }}
+                  {% render_field field class="form-control" %}
+                  {% for error in field.errors %}
+                  <span style="color:red">{{ error }}</span>
+                  {% endfor %}
+                  {% endfor %}
+                  <input type="submit" value="Register" class="mt-3 btn btn-block btn-primary">
+                </div>
+              </form>
+              <p class="text-center">Already have account? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</body>
+
+</html>

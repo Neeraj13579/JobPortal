@@ -1,0 +1,125 @@
+<nav>
+    <div class="left">
+        <a href="{% url 'home' %}">
+            <h1>Job<span>Portal</span></h1>
+        </a>
+    </div>
+    <div class="center">
+        {% if user.is_jobseeker %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'find-job' %}">Find Jobs</a></li>
+                <li><a href="{% url 'applied-job' %}">Applied Jobs</a></li>
+                <li><a href="{% url 'view-saved-post' %}">Saved Jobs</a></li>
+            </ul>
+        {% else %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'post-job' %}">Post Job</a></li>
+                <li><a href="{% url 'my-post' %}">My Posts</a></li>
+            </ul>
+        {% endif %}
+    </div>
+    <div class="right">
+
+        {% if request.resolver_match.view_name == "profile" %}
+            <span><a href="{% url 'logout' %}" class="logout"><i class="fa-solid fa-right-from-bracket"></i>
+                Logout</a></span>
+        {% else %}
+            <span class="bell">
+                {% if user_notifications %}
+                    <i class="fa-regular fa-bell fa-lg fa-bounce"></i>
+                {% else %}
+                    <i class="fa-regular fa-bell fa-lg"></i>
+                {% endif %}
+            </span>
+            <div id="notification">
+                <div class="v-shape"></div>
+                <div class="notification-container">
+                    <h3>Notifications</h3>
+                    <div class="notification-content">
+                        {% for item in user_notifications %}
+                        <div class="notification-box">
+                            <a class="post_link" href="{% url 'view-post' item.post.id %}">
+                                <h4>Hurray! you got new response on your application.</h4>
+                                <p>{{item.message}}</p>
+                            </a>
+                            <div class="btn">
+                                <div class="ntf-delete" data-notification-delete-id="{{ item.id }}">Delete</div>
+                                <div class="mark-as-read" data-notification-id="{{ item.id }}">Mark as read</div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="notification-box">
+                            <h4>No Notification!</h4>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <span><a href="{% url 'profile' %}" class="profile"><i class="fa-solid fa-user"></i> My Profile</a>
+    </div>
+</nav>
+
+{% load static %}
+<link rel="stylesheet" href='{% static "css/nav.css" %}'>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.querySelector('.bell').addEventListener("click", ()=>{
+        if (document.getElementById('notification').style.display == 'block') {
+            document.getElementById('notification').style.display = 'none';
+        }
+        else {
+            document.getElementById('notification').style.display = 'block';
+        }
+    });
+    
+
+    $(document).ready(function() {
+        // Add a click event handler to the button
+        $('.mark-as-read').click(function() {
+            var notificationId = $(this).data('notification-id');
+            var button = $(this);
+            console.log(notificationId)
+            $.ajax({
+                url: 'mark_notification_as_read/' + notificationId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        button.text('Marked as read');
+                    } else {
+                        button.text('Error');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while marking the notification as read.');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $('.ntf-delete').click(function() {
+            var notificationId = $(this).data('notification-delete-id');
+            var button = $(this);
+            $.ajax({
+                url: 'delete_notification/' + notificationId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        button.text('Deleted');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while deleting the notification.');
+                }
+            });
+        });
+    });
+
+</script>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post view</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+</head>
+<body>
+    {% block content %}
+    <h2>Posts</h2>
+    <ul>
+        {% for post in posts %}
+        <li>
+            <strong>{{ post.title }}</strong><br>
+            By: {{ post.user.first_name }} {{ post.user.phone_number }}<br>
+            Posted On: {{ post.created_at }} <br>
+            {{ post.content }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+</body>
+</html>

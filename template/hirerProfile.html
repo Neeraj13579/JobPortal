@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Job Portal | User Profile | Hirer | {{user_hirer.user.username}}</title>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "css/jobSeekerProfile.css" %}'>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "css/hirerProfile.css" %}'>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    <div class="container">
+        {% if user_hirer %}
+        <div class="profile-card">
+            <div class="image">
+                <form id="profileImgForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <img id="profile-img" src={{user_hirer.profile_image.url}} alt="Profile Image">
+                    <input type="file" id="imageInput" name="imageInput" accept="image/*" placeholder="Image" hidden>
+                    <button type="submit" name="form_img" id="form_img" value="Submit Form Image" hidden>Submit</button>
+                </form>
+            </div>
+            <p id="fullnameDisplay">{{ user_hirer.user.name }}</p>
+            <p id="usernameDisplay">@{{ user_hirer.user.username }}</p>
+            {% if user_hirer_address %}
+            <p id="locationDisplay"><i class="fa-solid fa-location-dot"></i> {{ user_hirer_address.country }}</p>
+            {% endif %}
+            <div class="social-media">
+                {% if user_hirer_social_media.facebook_url %}
+                <a href="{{user_hirer_social_media.facebook_url}}" target="_blank" id="facebook"><i class="fa-brands fa-square-facebook"></i></a>
+                {% endif %}
+                {% if user_hirer_social_media.linkedin_url %}
+                <a href="{{user_hirer_social_media.linkedin_url}}" target="_blank" id="linkedin"><i class="fa-brands fa-linkedin"></i></a>
+                {% endif %}
+                {% if user_hirer_social_media.twitter_url %}
+                <a href="{{user_hirer_social_media.twitter_url}}" target="_blank" id="twitter"><i class="fa-brands fa-twitter"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="profile-info">
+            <div class="menuRadio">
+                <input type="radio" name="menu" id="companyDetails" checked>
+                <label for="companyDetails">Company User Details</label>
+                <input type="radio" name="menu" id="companyMoreDetails">
+                <label for="companyMoreDetails">Company Details</label>
+                <input type="radio" name="menu" id="companyAddress">
+                <label for="companyAddress">Address</label>
+                <input type="radio" name="menu" id="companySocial">
+                <label for="companySocial">Social Media</label>
+            </div>
+            <div id="hirerCompanyData">
+                <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th><label for="id_hirer_name">Manager Name</label></th>
+                            <td><input class="profileForm nobg" type="text" name="name" id="id_hirer_name"
+                                    value="{{ user_hirer.user.name }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_hirer_username">Username</label></th>
+                            <td>
+                                <input class="profileForm nobg" type="text" name="username" id="id_hirer_username"
+                                    value="{{ user_hirer.user.username }}" disabled>
+                                {% if error %}
+                                <br><span style="color: red;">{{ error }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_hirer_email">Email</label></th>
+                            <td><input class="profileForm nobg" type="email" name="email" id="id_hirer_email"
+                                    value="{{ user_hirer.user.email }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_hirer_phone_number">Mobile</label></th>
+                            <td><input class="profileForm nobg" type="text" name="phone_number"
+                                    id="id_hirer_phone_number" value="{{ user_hirer.user.phone_number }}" disabled></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="submit" name="form1_submit" value="Submit Form 1" hidden>Save</button>
+                </form>
+                <button class="edit"><i class="fa-solid fa-pen"></i>Edit</button>
+            </div>
+            <div id="hirerCompanyDetailData">
+                <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th><label for="id_hirer_company_name">Company Name</label></th>
+                            <td><input class="companyForm nobg" type="text" name="company_name"
+                                    id="id_hirer_company_name" value="{{ user_hirer.company_name }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_hirer_about">About Company</label></th>
+                            <td>
+                                <textarea class="companyForm nobg" type="text" name="about_company" id="id_hirer_about"
+                                    value="{{ user_hirer.about_company }}" cols="30" rows="10"
+                                    disabled>{{ user_hirer.about_company }}</textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="submit" name="form2_submit" value="Submit Form 2" hidden>Save</button>
+                </form>
+                <button class="edit"><i class="fa-solid fa-pen"></i>Edit</button>
+            </div>
+            <div id="hirerAddressData">
+                <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th><label for="id_street_address">Street</label></th>
+                            <td><input class="addressForm nobg" type="text" name="street_address" id="id_street_address"
+                                    value="{{ user_hirer_address.street_address }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_city">City</label></th>
+                            <td><input class="addressForm nobg" type="text" name="city" id="id_city"
+                                    value="{{ user_hirer_address.city }}" disabled required></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_state">State</label></th>
+                            <td><input class="addressForm nobg" type="text" name="state" id="id_state"
+                                    value="{{ user_hirer_address.state }}" disabled required></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_postal_code">Postal Code</label></th>
+                            <td><input class="addressForm nobg" type="number" name="postal_code" id="id_postal_code"
+                                    value="{{ user_hirer_address.postal_code }}" disabled>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_country">Country</label></th>
+                            <td><input class="addressForm nobg" type="text" name="country" id="id_country"
+                                    value="{{ user_hirer_address.country }}" disabled required></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="submit" name="form3_submit" value="Submit Form 3" hidden>Save</button>
+                </form>
+                <button class="edit"><i class="fa-solid fa-pen"></i>Edit</button>
+            </div>
+            <div id="hirerSocialData">
+                <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th><label for="id_facebook">Facebook URL</label></th>
+                            <td><input class="socialForm nobg" type="url" name="facebook" id="id_facebook"
+                                    value="{{ user_hirer_social_media.facebook_url }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_linkedin">LinkedIn URL</label></th>
+                            <td><input class="socialForm nobg" type="url" name="linkedin" id="id_linkedin"
+                                    value="{{ user_hirer_social_media.linkedin_url }}" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_twitter">Twitter URL</label></th>
+                            <td><input class="socialForm nobg" type="url" name="twitter" id="id_twitter"
+                                    value="{{ user_hirer_social_media.twitter_url }}" disabled></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="submit" name="form4_submit" value="Submit Form 4" hidden>Save</button>
+                </form>
+                <button class="edit"><i class="fa-solid fa-pen"></i>Edit</button>
+            </div>
+        </div>
+
+        {% else %}
+        <p>No profile data available.</p>
+        {% endif %}
+    </div>
+
+    {% include "footer.html" %}
+
+
+    {% load static %}
+    <script src="{% static 'js/hirerProfile.js' %}"></script>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>      
+</body>
+
+</html>

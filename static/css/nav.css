@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Croissant+One&family=Roboto&family=Ubuntu&display=swap');
+
+/* font-family: 'Croissant One', cursive; */
+/* font-family: 'Roboto', sans-serif; */
+/* font-family: 'Ubuntu', sans-serif; */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* nav  */
+nav {
+    background-color: rgba(232, 232, 232, 0.966);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 6px;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+nav .center ul {
+    display: flex;
+    list-style: none;
+}
+
+nav .center ul li {
+    font-family: 'Roboto', sans-serif;
+    padding: 8px 18px;
+    font-size: 1.5rem;
+}
+
+nav .center ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+nav .right span a {
+    font-family: 'Roboto', sans-serif;
+    padding: 6px 18px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin: 0 18px;
+    background: none;
+    text-decoration: none;
+}
+
+.profile {
+    color: white;
+}
+
+.logout,
+.bell {
+    color: black;
+}
+
+nav .right .profile {
+    background-color: rgb(0, 85, 255);
+}
+
+nav .left {
+    font-size: 2rem;
+}
+
+nav .left:hover {
+    font-stretch: 250%;
+}
+
+nav .left a {
+    text-decoration: none;
+    color: black;
+    font-family: 'Croissant One', cursive;
+}
+
+nav .left h1 span {
+    color: rgb(0, 85, 255);
+}
+
+#notification {
+    position: absolute;
+    background-color: #ffffff;
+    height: 520px;
+    width: 350px;
+    top: 95px;
+    right: 100px;
+    border-radius: 12px;
+    border: 1px solid grey;
+    padding: 6px 10px;
+    display: none;
+}
+
+.v-shape {
+    position: absolute;
+    top: -20px;
+    left: 135px;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid #ffffff;
+    z-index: 2;
+}
+
+.notification-container {
+    /* background-color: red; */
+    height: 500px;
+    width: 345px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.notification-container h3 {
+    font-size: 1.4rem;
+    margin: 10px 0;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.notification-content a {
+    color: black;
+    text-decoration: none;
+}
+
+.notification-box {
+    color: black;
+    width: 320px;
+    height: auto;
+    padding: 2px 5px;
+    border-radius: 8px;
+    border: 1px solid grey;
+    cursor: pointer;
+}
+
+.notification-box h4 {
+    font-size: 1.1rem;
+    margin: 6px 0;
+}
+
+.notification-box p {
+    font-size: 1rem;
+}
+
+.notification-box .btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.notification-box .btn div {
+    margin: 4px 0;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background-color: #E9E9E9;
+    transition: all 0.5s ease;
+}
+
+.notification-box .btn div:hover {
+    background-color: #cccccc;
+}
+
+.notification-box .btn .ntf-delete {
+    color: red;
+}
+
+.notification-box .btn .mark-as-read {
+    color: blue;
+}
+
+.notification-content .unread {
+    background-color: blue;
+    color: #ffffff;
+}
+
+.bell {
+    cursor: pointer;
+    margin: 0 33px;
+}

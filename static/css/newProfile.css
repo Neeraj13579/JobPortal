@@ -1,0 +1,215 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* nav  */
+nav {
+    background-color: rgba(232, 232, 232, 0.966);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 6px;
+
+}
+
+nav .center ul {
+    display: flex;
+    list-style: none;
+}
+
+nav .center ul li {
+    padding: 8px 18px;
+    font-size: 1.5rem;
+}
+
+nav .center ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+nav .right span a {
+    padding: 6px 18px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin: 0 18px;
+    background: none;
+    text-decoration: none;
+}
+
+#profile{
+    color: white;
+}
+
+#logout{
+    color: black;
+}
+
+nav .right #profile {
+    background-color: rgb(0, 85, 255);
+}
+
+nav .left {
+    font-size: 2rem;
+}
+
+/* Aside  */
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 88vh;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked+label {
+    background-color: rgb(0, 85, 255);
+}
+
+/* profile card  */
+.container .profile-card {
+    background-color: whitesmoke;
+    border: 2px solid rgba(214, 214, 214, 0.577);
+    border-radius: 6px;
+    padding: 25px 65px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.container .profile-card img {
+    border-radius: 50%;
+}
+
+.container .profile-info {
+    background-color: whitesmoke;
+    border: 2px solid rgba(214, 214, 214, 0.577);
+    border-radius: 6px;
+    font-size: 1.1rem;
+    width: 45%;
+}
+
+.container .profile-info .menuRadio {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container .profile-info .menuRadio label {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid grey;
+}
+
+.container .profile-info table {
+    padding: 12px;
+    width: 100%;
+}
+
+.container .profile-info table th {
+    height: 4em;
+    text-align: left;
+}
+
+.container .profile-info table td input {
+    font-size: 1.1rem;
+    width: 75%;
+}
+
+.container .profile-info table th, td {
+    border-bottom: 2px solid grey;
+}
+
+.container .profile-info button {
+    padding: 6px 15px;
+    font-size: 1.1rem;
+    margin: 12px;
+    cursor: pointer;
+    border: 1px solid grey;
+    /* border-radius: 6px; */
+}
+
+.container .profile-info button i {
+    padding: 1px 4px;
+}
+
+#fullnameDisplay {
+    font-size: 1.2rem;
+    padding: 8px 0;
+}
+
+#usernameDisplay {
+    padding: 5px 0;
+    color: gray;
+}
+
+#locationDisplay {
+    color: rgb(62, 62, 62);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
+}
+
+.nobg {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.bg {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid grey;
+}
+
+#technicalData,
+#addressData,
+#educationData,
+#experienceData {
+    display: none;
+}
+
+.dateEdu,
+.dateExp, 
+#dateDet{
+    padding: 18px 0;
+    display: none;
+}
+
+.dateTextEdu input,
+.dateTextExp input,
+#dateTextDet input {
+    border: none;
+}
+#skillsInput{
+    display: none;
+    padding: 20px 0;
+}
+#skillsOutput span{
+    background-color: rgb(0, 102, 255);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 6px;
+}
+
+.inputEdu,
+.inputExp{
+    display: none;
+    padding: 20px 0;
+}
+
+#profile-img{
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+#resumeStatus a{
+    color: black;
+}

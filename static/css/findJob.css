@@ -1,0 +1,257 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F8F9FA;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 18px 0;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 2em;
+    /* border-radius: 12px; */
+    /* background-color: #FFFFFF; */
+    /* transition: box-shadow 0.5s ease; */
+}
+
+/* .container h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin: 6px 0;
+} */
+
+.filter {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 20%;
+    transition: box-shadow 0.5s ease;
+}
+
+.filter:hover {
+    box-shadow: 0px 0px 20px 2px rgba(213, 213, 213, 0.685);
+}
+
+.filter h2 {
+    margin-top: 12px;
+    margin-bottom: 6px;
+}
+
+.filter h3 {
+    font-size: 1.2rem;
+    margin-top: 12px;
+    margin-bottom: 6px;
+}
+
+.box-filter {
+    font-size: 1.1rem;
+    margin: 12px 0;
+}
+
+.box-filter label {
+    cursor: pointer;
+}
+
+.box-filter label span {
+    font-size: 1rem;
+    color: #717B9E;
+}
+
+.box-filter select,
+option {
+    font-size: 1rem;
+    width: 100%;
+    padding: 2px 6px;
+    outline: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.filter hr {
+    border: 1px solid rgba(222, 222, 222, 0.5);
+}
+
+.box-filter-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box-filter-head span {
+    font-size: 1rem;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#loc-view-all,
+#role-view-all,
+#dept-view-all,
+#loc-view-less,
+#role-view-less,
+#dept-view-less {
+    font-size: 1rem;
+    color: rgb(0, 85, 255);
+    cursor: pointer;
+    margin-left: 18px;
+}
+
+#loc-view-all:hover,
+#role-view-all:hover,
+#dept-view-all:hover,
+#loc-view-less:hover,
+#role-view-less:hover,
+#dept-view-less:hover {
+    text-decoration: underline;
+}
+
+#all-department-content,
+#all-location-content,
+#all-role-content {
+    display: none;
+}
+
+
+
+
+
+.hero-box {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1em; */
+}
+
+.hero-box a {
+    text-decoration: none;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    border: 1px solid rgba(190, 190, 190, 0.696);
+    background-color: #FFFFFF;
+    width: 700px;
+    padding: 24px 40px;
+    margin-bottom: 1em;
+    cursor: pointer;
+    transition: box-shadow 0.5s ease;
+}
+
+.box:hover {
+    box-shadow: 0px 0px 20px 2px rgba(213, 213, 213, 0.685);
+}
+
+.box-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box-title h3 {
+    color: black;
+    font-size: 1.3rem;
+    line-height: 1.1em;
+}
+
+.box-title h5 {
+    color: black;
+    font-size: 1.1rem;
+}
+
+.box-img img {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+}
+
+.box-list {
+    color: rgb(80, 80, 80);
+    font-size: 1rem;
+}
+
+.box-list-top {
+    display: flex;
+    gap: 2em;
+    line-height: 2em;
+}
+
+.box-list-top span i {
+    padding-right: 3px;
+}
+
+.box-list-top .rupee {
+    padding: 0 30px;
+    border-left: 1px solid rgb(223, 223, 223);
+    border-right: 1px solid rgb(223, 223, 223);
+}
+
+.box-list-bottom {
+    font-size: 1rem;
+}
+
+.box-list-bottom span i {
+    padding-right: 3px;
+}
+
+.box-content {
+    font-size: 0.9rem;
+    color: #717B9E;
+    line-height: 2em;
+}
+
+.box-end {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #717B9E;
+    line-height: 2em;
+}
+
+.box-end .box-btn {
+    display: flex;
+    gap: 1em;
+}
+
+.box-end .box-btn a {
+    text-decoration: none;
+    color: #717B9E;
+}
+
+.box-end .box-btn .hide,
+.save,
+.unsave {
+    transition: color 500ms ease;
+    cursor: pointer;
+}
+
+.box-end .box-btn .hide:hover,
+.save:hover {
+    color: rgb(0, 85, 255);
+}
+
+.unsave:hover {
+    color: orange;
+}
+.noData{
+    background-color: #FFFFFF;
+    width: 50%;
+    border-radius: 12px;
+    text-align: center;
+}
+.noData:hover{
+    box-shadow: 0px 0px 20px 2px rgba(213, 213, 213, 0.685);
+}
+.noData h3{
+    font-size: 2rem;
+    margin: 120px 0;
+}
+.text-recommend{
+    color: orange;
+}

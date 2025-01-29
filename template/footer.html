@@ -1,0 +1,89 @@
+{% load static %}
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    footer{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        bottom: 0;
+        background-color: #E9E9E9;
+        height: 200px;
+        width: 100%;
+        box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .logo img{
+        width: 275px;
+        height: 200px;
+    }
+    .center-text{
+        display: flex;
+        flex-direction: column;
+        font-size: 1.1rem;
+    }
+    .center-text a{
+        text-decoration: none;
+        color: rgb(73, 73, 73);
+        line-height: 1.3em;
+    }
+    .center-text a:hover{
+        text-decoration: underline;
+    }
+    .center-text p{
+        font-weight: 700;
+        margin: 0.5em 0;
+        font-size: 1.2rem;
+    }
+    .right-footer{
+        padding: 12px 20px;
+    }
+    .right-footer .right-logo{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 1em;
+        margin: 20px 0;
+    }
+    .right-footer .right-logo span i {
+        cursor: pointer;
+        font-size: 2rem;
+    }
+    .right-footer h4{
+        font-family:'Times New Roman', Times, serif;
+        font-size: 1rem;
+    }
+</style>
+
+
+<footer>
+    <div class="logo">
+        <img src='{% static "img/favicon.png" %}' alt="Logo">
+    </div>
+    <div class="center-text">
+        <p>Main Links</p>
+        {% if request.user.is_jobseeker %}
+            <a href="{% url 'find-job' %}"><span>find a Job</span></a>
+            <a href="{% url 'profile' %}"><span>My Profile</span></a>
+            <a href="{% url 'applied-job' %}"><span>Check applied jobs</span></a>
+            <a href="{% url 'view-saved-post' %}"><span>Check saved jobs</span></a>
+        {% endif %}
+        {% if request.user.is_hirer %}
+            <a href="{% url 'post-job' %}"><span>Post a Job</span></a>
+            <a href="{% url 'profile' %}"><span>My Profile</span></a>
+            <a href="{% url 'my-post' %}"><span>Check my posts</span></a>
+        {% endif %}
+    </div>
+    <div class="right-footer">
+        <div class="right-logo">
+            <span><i class="fa-brands fa-square-facebook fa-xl"></i></span>
+            <span><i class="fa-brands fa-linkedin fa-xl"></i></span>
+            <span><i class="fa-brands fa-instagram fa-xl"></i></span>
+            <span><i class="fa-brands fa-github fa-xl"></i></span>
+        </div>
+        <h4>&reg; All rights reserved by JobPortal</h4>
+        <h4>&copy; Copyrights by JobPortal.</h4>
+    </div>
+</footer>

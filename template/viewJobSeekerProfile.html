@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Job Portal | User Profile | Job Seeker | {{user_job_seeker.user.username}}</title>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "css/jobSeekerProfile.css" %}'>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    <div class="container">
+        {% if user_job_seeker %}
+        <div class="profile-card">
+            <div class="image">
+                <form id="profileImgForm" method="POST" enctype="multipart/form-data">
+                    <img id="profile-img" src={{user_job_seeker.profile_image.url}} alt="Profile Image" width="230"
+                        height="230">
+                </form>
+            </div>
+            <p id="fullnameDisplay">{{ user_job_seeker.user.name }}</p>
+            <p id="usernameDisplay">@{{ user_job_seeker.user.username }}</p>
+            {% if user_job_seeker_address %}
+            <p id="locationDisplay"><i class="fa-solid fa-location-dot"></i> {{ user_job_seeker_address.country }}</p>
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <div class="menuRadio">
+                <input type="radio" name="menu" id="basic" checked>
+                <label for="basic">Basic Details</label>
+                <input type="radio" name="menu" id="technical">
+                <label for="technical">Technical Info</label>
+                <input type="radio" name="menu" id="address">
+                <label for="address">Address</label>
+                <input type="radio" name="menu" id="education">
+                <label for="education">Education</label>
+                <input type="radio" name="menu" id="experience">
+                <label for="experience">Experience</label>
+            </div>
+            <div id="basicData">
+                <table>
+                    <tr>
+                        <th><label for="id_name">Name</label></th>
+                        <td><input class="profileForm nobg" type="text" name="name" id="id_name"
+                                value="{{ user_job_seeker.user.name }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_username">Username</label></th>
+                        <td>
+                            <input class="profileForm nobg" type="text" name="username" id="id_username"
+                                value="{{ user_job_seeker.user.username }}" disabled>
+                            {% if error %}
+                            <br><span style="color: red;">{{ error }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_email">Email</label></th>
+                        <td><input class="profileForm nobg" type="email" name="email" id="id_email"
+                                value="{{ user_job_seeker.user.email }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_phone_number">Mobile</label></th>
+                        <td><input class="profileForm nobg" type="number" name="phone_number" id="id_phone_number"
+                                value="{{ user_job_seeker.user.phone_number }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_date_of_birth">Date of Birth</label></th>
+                        <td id="dateDet"><input class="profileForm nobg" type="date" name="date_of_birth"
+                                id="id_date_of_birth" value="{{ user_job_seeker.date_of_birth|date:'Y-m-d' }}"
+                                max="2006-12-31" disabled></td>
+                        <td id="dateTextDet"><input type="text" placeholder="date of birth"
+                                value="{{ user_job_seeker.date_of_birth|date:'d-m-Y' }}" disabled></td>
+                    </tr>
+                </table>
+
+            </div>
+            <div id="technicalData">
+                <table>
+                    <tr>
+                        <th><label for="id_about">About me</label></th>
+                        <td><input class="technicalForm nobg" type="text" name="about" id="id_about"
+                                value="{{ user_job_seeker.about }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_skills">Skills</label></th>
+                        <td id="skillsInput"><input class="technicalForm nobg" type="text" name="skills" id="id_skills"
+                                value="{{ user_job_seeker.skills }}" disabled>
+                            <br><span style="color: red;">Note: Enter skills separated by , (comma) only<span>
+                        </td>
+                        <td id="skillsOutput">
+                            {% for item in skills %}
+                            <span>{{item}}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_resume">Resume</label></th>
+                        {% if user_job_seeker.resume %}
+                        <td id="resumeStatus"><a href="{{user_job_seeker.resume.url}}" target="_blank">View</a></td>
+                        {% else %}
+                        <td id="resumeStatus">Resume Not Uploaded!</td>
+                        {% endif %}
+                    </tr>
+                </table>
+
+            </div>
+            <div id="addressData">
+                <table>
+                    <tr>
+                        <th><label for="id_street_address">Street</label></th>
+                        <td><input class="addressForm nobg" type="text" name="street_address" id="id_street_address"
+                                value="{{ user_job_seeker_address.street_address }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_city">City</label></th>
+                        <td><input class="addressForm nobg" type="text" name="city" id="id_city"
+                                value="{{ user_job_seeker_address.city }}" disabled required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_state">State</label></th>
+                        <td><input class="addressForm nobg" type="text" name="state" id="id_state"
+                                value="{{ user_job_seeker_address.state }}" disabled required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_postal_code">Postal Code</label></th>
+                        <td><input class="addressForm nobg" type="number" name="postal_code" id="id_postal_code"
+                                value="{{ user_job_seeker_address.postal_code }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_country">Country</label></th>
+                        <td><input class="addressForm nobg" type="text" name="country" id="id_country"
+                                value="{{ user_job_seeker_address.country }}" disabled required></td>
+                    </tr>
+                </table>
+
+            </div>
+            <div id="educationData">
+                <table>
+                    <tr>
+                        <th><label for="id_school_name">School Name</label></th>
+                        <td class="inputEdu"><input class="educationForm bg" type="text" name="school_name"
+                                id="id_school_name" required></td>
+                        <div class="displayEdu">
+                            {% for item in user_job_seeker_education %}
+                            <td>{{item.school_name}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_field_of_study">Field of Study</label></th>
+                        <td class="inputEdu"><input class="educationForm bg" type="text" name="field_of_study"
+                                id="id_field_of_study" required></td>
+                        <div class="displayEdu">
+                            {% for item in user_job_seeker_education %}
+                            <td>{{item.field_of_study}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_degree">Degree</label></th>
+                        <td class="inputEdu"><input class="educationForm bg" type="text" name="degree" id="id_degree"
+                                required></td>
+                        <div class="displayEdu">
+                            {% for item in user_job_seeker_education %}
+                            <td>{{item.degree}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_start_date_edu">Start Date</label></th>
+                        <td class="inputEdu" class="dateEdu"><input class="educationForm bg" type="date"
+                                name="start_date_edu" id="id_start_date_edu"
+                                value="{{ user_job_seeker_education.start_date|date:'Y-m-d' }}" required></td>
+                        <!-- <td class="inputEdu" class="dateTextEdu"><input type="text" placeholder="{{ user_job_seeker_education.start_date }}"></td> -->
+                        <div class="displayEdu">
+                            {% for item in user_job_seeker_education %}
+                            <td>{{item.start_date|date:'d-m-Y'}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_end_date_edu">End Date</label></th>
+                        <td class="inputEdu" class="dateEdu"><input class="educationForm bg" type="date"
+                                name="end_date_edu" id="id_end_date_edu" required></td>
+                        <!-- <td class="inputEdu" class="dateTextEdu"><input type="text" placeholder="{{ user_job_seeker_education.end_date }}"></td> -->
+                        <div class="displayEdu">
+                            {% for item in user_job_seeker_education %}
+                            <td>{{item.end_date|date:'d-m-Y'}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                </table>
+
+            </div>
+            <div id="experienceData">
+                <table>
+                    <tr>
+                        <th><label for="id_company_name">Company Name</label></th>
+                        <td class="inputExp"><input class="experienceForm bg" type="text" name="company_name"
+                                id="id_company_name" required></td>
+                        <div class="displayExp">
+                            {% for item in user_job_seeker_experience %}
+                            <td>{{item.company_name}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_position">Postion</label></th>
+                        <td class="inputExp"><input class="experienceForm bg" type="text" name="position"
+                                id="id_position" required></td>
+                        <div class="displayExp">
+                            {% for item in user_job_seeker_experience %}
+                            <td>{{item.position}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                    <tr>
+                        <th><label for="id_start_date_exp">Start Date</label></th>
+                        <td class="inputExp" class="dateExp"><input class="experienceForm bg" type="date"
+                                name="start_date_exp" id="id_start_date_exp" required>
+                        </td>
+                        <div class="displayExp">
+                            {% for item in user_job_seeker_experience %}
+                            <td>{{item.start_date|date:'d-m-Y'}}</td>
+                            {% endfor %}
+                        </div>
+                        <!-- <td class="dateTextExp"><input type="text" placeholder="{{user_job_seeker_experience.start_date}}"></td> -->
+                    </tr>
+                    <tr>
+                        <th><label for="id_end_date_exp">End Date</label></th>
+                        <td class="inputExp" class="dateExp"><input class="experienceForm bg" type="date"
+                                name="end_date_exp" id="id_end_date_exp" required></td>
+                        <div class="displayExp">
+                            {% for item in user_job_seeker_experience %}
+                            <td>{{item.end_date|date:'d-m-Y'}}</td>
+                            {% endfor %}
+                        </div>
+                        <!-- <td class="dateTextExp"><input type="text" placeholder="{{user_job_seeker_experience.start_date}}"></td> -->
+                    </tr>
+                    <tr>
+                        <th><label for="id_description_exp">Description</label></th>
+                        <td class="inputExp"><input class="experienceForm bg" type="text" name="description_exp"
+                                id="id_description_exp"></td>
+                        <div class="displayExp">
+                            {% for item in user_job_seeker_experience %}
+                            <td>{{item.description}}</td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        {% else %}
+        <p>No profile data available.</p>
+        {% endif %}
+    </div>
+
+
+    {% include "footer.html" %}
+
+    {% load static %}
+    <script src="{% static 'js/viewJobSeekerProfile.js' %}"></script>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

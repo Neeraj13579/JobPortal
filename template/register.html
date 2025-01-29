@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <title>Job Portal Registration</title>
+  {% load static %}
+  <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+  <style>
+    body {
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body class="vh-100 d-flex align-items-center">
+
+  <section class="w-100">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="text-center card-header text-black">
+              <h2>Job Portal Registration</h2>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <a type="button" class="btn btn-block" href="{% url 'job_seeker_register' %}">I am a
+                    Job Seeker</a>
+                </div>
+                <div class="col-lg-6">
+                  <a type="button" class="btn btn-block" href="{% url 'hirer_register' %}">I am an
+                    Hirer</a>
+                </div>
+              </div>
+              <hr>
+              </form>
+              <p class="text-center">Already have account? <a href=" {% url 'login' %}">Login</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+</body>
+
+</html>

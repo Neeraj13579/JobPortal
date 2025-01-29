@@ -1,0 +1,73 @@
+<style>
+    #apply-alert{
+        display: none;
+    }
+    #apply-alert-contianer {
+        background-color: rgba(234, 241, 255, 0.967);
+        max-width: 400px;
+        max-height: 225px;
+        padding: 8px 12px;
+        top: 50%;
+        left: 50%;
+        margin-top: -112.5px; /* Negative half of height. */
+        margin-left: -200px; /* Negative half of width. */
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        border: 2px solid black;
+        z-index: 2;
+    }
+    #apply-alert-contianer h3 {
+        font-size: 1.5rem;
+        margin: 12px 0;
+    }
+    #apply-alert-contianer #apply-alert-content p {
+        font-size: 1.1rem;
+        margin: 12px 0;
+    }
+    #apply-alert-contianer #apply-alert-content #apply-btn{
+        display: flex;
+        justify-content: space-around;
+    }
+    #apply-alert-contianer #apply-alert-content #apply-btn button{
+        margin: 8px 0;
+        font-size: 1.1rem;
+        background-color: blue;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="apply-alert">
+    <div id="apply-alert-contianer">
+        <h3 id="applyAlertHeading">Alert Message</h3>
+        <div id="apply-alert-content">
+            <p id="applyAlertPara">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium iste molestias ut corrupti commod</p>
+            <span>Email: {{user_job_seeker.user.email}}</span><br>
+            {% if user_job_seeker.resume %}
+            <span>Your Resume: <a href="{{user_job_seeker.resume.url}}" target="_blank">View</a></span>
+            {% endif %}
+            <div id="apply-btn">
+                <button id="apply-cancel">Cancel</button>
+                <a id="applyOkayATag" href="{% url 'apply-job' post.id %}">
+                    <button id="apply-okay">Okay</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('apply-cancel').addEventListener("click", ()=>{
+        document.getElementById('apply-alert').style.display = 'none';
+    });
+    document.getElementById('apply-okay').addEventListener("click", ()=>{
+        document.getElementById('apply-alert').style.display = 'none';
+    });
+</script>

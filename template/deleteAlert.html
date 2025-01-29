@@ -1,0 +1,69 @@
+<style>
+    #alert{
+        display: none;
+    }
+    #alert-contianer {
+        background-color: rgba(234, 241, 255, 0.967);
+        max-width: 400px;
+        max-height: 225px;
+        padding: 8px 12px;
+        top: 50%;
+        left: 50%;
+        margin-top: -112.5px; /* Negative half of height. */
+        margin-left: -200px; /* Negative half of width. */
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        border: 2px solid black;
+        z-index: 2;
+    }
+    #alert-contianer h3 {
+        font-size: 1.5rem;
+        margin: 12px 0;
+    }
+    #alert-contianer #alert-content p {
+        font-size: 1.1rem;
+        margin: 12px 0;
+    }
+    #alert-contianer #alert-content #btn{
+        display: flex;
+        justify-content: space-around;
+    }
+    #alert-contianer #alert-content #btn button{
+        margin: 8px 0;
+        font-size: 1.1rem;
+        background-color: blue;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="alert">
+    <div id="alert-contianer">
+        <h3 id="alertHeading">Alert Message</h3>
+        <div id="alert-content">
+            <p id="alertPara">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium iste molestias ut corrupti commod</p>
+            <div id="btn">
+                <button id="cancel">Cancel</button>
+                <a id="okayATag" href="{% url 'delete-post' post.id %}">
+                    <button id="okay">Okay</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('cancel').addEventListener("click", ()=>{
+        document.getElementById('alert').style.display = 'none';
+    });
+    document.getElementById('okay').addEventListener("click", ()=>{
+        document.getElementById('alert').style.display = 'none';
+    });
+</script>

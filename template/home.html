@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal | Home</title>
+    {% load static %}
+    <!-- <link rel="stylesheet" href="{% static 'css/index.css' %}"> -->
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+    <!-- <nav> -->
+    {% include "nav.html" %}
+    <!-- </nav> -->
+
+    <h2 id="greeting-head">
+        <span id="greeting"></span>
+        {% if user_job_seeker %}
+        <span class="greeting-user">{{user_job_seeker.user.name}}!</span><br>Find your job now👇
+        {% else %}
+        <span class="greeting-user">{{user_hirer.user.name}}!</span>
+        {% endif %}
+    </h2>
+
+    {% if request.user.is_jobseeker %}
+        {% include "searchBox.html" %}
+    {% endif %}
+    
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-img">
+                {% if user_job_seeker %}
+                <img src="{{user_job_seeker.profile_image.url}}" alt="Profile Image">
+                {% else %}
+                <img src="{{user_hirer.profile_image.url}}" alt="Profile Image">
+                {% endif %}
+            </div>
+            <div class="profile-name">
+                {% if user_job_seeker %}
+                <h3>{{user_job_seeker.user.name}}</h3>
+                {% else %}
+                <h3>{{user_hirer.user.name}}</h3>
+                {% endif %}
+            </div>
+            <div class="percentage">
+                <p>Profile <span>{{percentage_user|floatformat:2}}%</span> Completed</p>
+            </div>
+
+            <div class="timeline">
+                <!-- <div id="percentage-timeline" style="width: {{percentage_user}}%;"></div> -->
+                <div id="percentage-timeline"></div>
+            </div>
+
+            <div class="incomplete">
+                {% if percentage_user != 100 %}
+                    <h3>What are you missing?</h3>
+                {% endif %}
+                <div class="incomplete-content">
+                    {% if request.user.is_jobseeker %}
+
+                        {% if user_job_seeker.about is None or not user_job_seeker.about %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Complete About me</span>
+                            </div>
+                        {% endif %}
+                        {% if user_job_seeker.profile_image.name == "profile_images/defaultProfileImage.png" %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-image-portrait"></i>
+                                <span>Upload your picture</span>
+                            </div>
+                        {% endif %}
+                        {% if user_job_seeker.skills == 'None' or not user_job_seeker.skills %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add your skills</span>
+                            </div>
+                        {% endif %}
+                        {% if not user_job_seeker.resume  %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span>Upload Resume</span>
+                            </div>
+                        {% endif %}
+                        {% if not user_job_seeker_address  %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add your address</span>
+                            </div>
+                        {% endif %}
+                        {% if not user_job_seeker_first_education  %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add your Education</span>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {% if not user_hirer.company_name or user_hirer.company_name == 'None' %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add your company name</span>
+                            </div>
+                        {% endif %}
+                        {% if user_hirer.about_company == 'None' or not user_hirer.about_company %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add about your company</span>
+                            </div>
+                        {% endif %}
+                        {% if user_hirer.profile_image.name == "profile_images/defaultProfileImage.png" %}
+                            <div class="incomplete-box">
+                                <i class="fa-solid fa-image-portrait"></i>
+                                <span>Upload your picture</span>
+                            </div>
+                        {% endif %}
+                        {% if not user_hirer_address %}
+                       <div class="incomplete-box">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Add your company address</span>
+                            </div>
+                        {% endif %}
+
+
+                    {% endif %}
+                </div>
+
+                <div class="incomplete-btn">
+                    {% if percentage_user != 100 %}
+                    <a href="{% url 'profile' %}"><button class="profile-btn">Complete Profile</button></a>
+                    {% else %}
+                    <a href="{% url 'profile' %}"><button class="profile-btn">Update Profile</button></a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="hero-container">
+
+
+            {% if user_job_seeker %}
+                <div class="dashboard">
+                    <h3>Dashboard</h3>
+                    <div class="dashboard-box-content">
+                        <div class="dashboard-box">
+                            <h4>Total Applied Jobs</h4>
+                            <span>{{job_applications|length}}</span>
+                        </div>
+                        <div class="dashboard-box">
+                            <h4>Total Response Pending</h4>
+                            <span>{{pending_response}}</span>
+                        </div>
+                        <div class="dashboard-box">
+                            <h4>Total Response Received</h4>
+                            <span>{{received_response}}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="recommendation">
+                    <div class="recommended-head">
+                        <h3>Recommended Jobs</h3>
+                        <a href="{% url 'recommendations' %}"><span>View all</span></a>
+                    </div>
+                    <div class="recommendation-box-content">
+                        {% for item in recommended_jobs %}
+                        <a href="{% url 'view-post' item.id %}">
+                            <div class="recommendation-box">
+                                <div class="box-head">
+                                    <img src="{{item.hirer.profile_image.url}}" alt="Company Image" width="65" height="50">
+                                    <span>{{item.created_at|timesince }} ago</span>
+                                </div>
+                                <div class="box-content">
+                                    <h3>{{item.title|truncatechars:30}}</h3>
+                                    <span>{{item.hirer.company_name|truncatechars:20}}</span>
+                                    <p><span style="font-weight: bold;">Skills:</span> {{item.skills_requirement|truncatechars:20}}</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div class="dashboard">
+                    <h3>Dashboard</h3>
+                    <div class="dashboard-box-content">
+                        <div class="dashboard-box">
+                            <h4>Total Jobs Posted</h4>
+                            <span>{{user_hirer_posts|length}}</span>
+                        </div>
+                        <div class="dashboard-box">
+                            <h4>Total Job Seekers Applied</h4>
+                            <span>{{num_applications}}</span>
+                        </div>
+                        <div class="dashboard-box">
+                            <h4>Total Response Pending</h4>
+                            <span>{{pending_response}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="recommendation">
+                    <div class="recommended-head">
+                        <h3>Recommended Job Seekers</h3>
+                        <a href=""><span>View all</span></a>
+                    </div>
+                    <div class="recommendation-box-content">
+                        <div class="recommendation-box">
+                            <div class="box-head">
+                                <img src="{{user_hirer.profile_image.url}}" alt="Company Image">
+                                <span>23h ago</span>
+                            </div>
+                            <div class="box-content">
+                                <h3>User name</h3>
+                                <span>skills</span>
+                                <p>country name</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+
+
+    <script>
+        var currentTime = new Date().getHours();
+        var greeting;
+
+        if (currentTime >= 5 && currentTime < 12) {
+            greeting = "Good Morning, ";
+        } else if (currentTime >= 12 && currentTime < 18) {
+            greeting = "Good Afternoon, ";
+        } else {
+            greeting = "Good Evening, ";
+        }
+
+        var greetingElement = document.getElementById("greeting");
+        greetingElement.textContent = greeting;
+
+        let percentageTimeline = document.getElementById('percentage-timeline');
+        setInterval(() => {
+            percentageTimeline.style.width = {{percentage_user}}+'%';
+        }, 1500);
+
+        if ({{percentage_user}} == 100){
+            document.getElementsByClassName('incomplete')[0].style.backgroundColor = 'transparent';
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h1>Welcome</h1>
+
+{% if user.is_authenticated %}
+    {% comment %} <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a> <br>  {% endcomment %}
+    <a href="{% url 'profile' %}">Profile</a> <br>
+    <a href="{% url 'logout' %}">Logout</a> <br>
+{% else %}
+    <a href="{% url 'register' %}">Register</a> <br>
+    <a href="{% url 'login' %}">Login</a> 
+{% endif %} -->

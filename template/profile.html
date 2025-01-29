@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if user_hirer %}
+        {{ user_hirer.user.name }}
+        {% elif user_job_seeker %}
+        {{ user_job_seeker.user.name }}
+        {% else %}
+        Profile
+        {% endif %}
+        | Job Portal
+    </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+    <style>    
+        .container .item input{
+            border: none;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+
+        <!-- Display Hirer profile fields -->
+        {% if user_hirer %}
+        <div class="item">
+            <label for="id_username_hirer">Username:</label>
+            <input type="text" name="username" id="id_username_hirer" value="{{ user_hirer.user.username }}" readonly>
+            <div>
+                {% if error %}
+                <br><span style="color: red;">{{ error }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="item">
+            <label for="id_name_hirer">Name:</label>
+            <input type="text" name="name" id="id_name_hirer" value="{{ user_hirer.user.name }}"
+                readonly>
+        </div>
+
+        {% comment %}  
+        <!-- <div class="item">
+            <label for="last_name_hirer">Second Name:</label>
+            <input type="text" name="last_name" id="last_name_hirer" value="{{ user_hirer.user.last_name }}" readonly>
+        </div> -->
+        {% endcomment %}
+
+        <div class="item">
+            <label for="id_email_hirer">Email:</label>
+            <input type="text" name="email" id="id_email_hirer" value="{{ user_hirer.user.email }}" readonly>
+        </div>
+        <div class="item">
+            <label for="id_phone_number_hirer">Phone Number:</label>
+            <input type="text" name="phone_number" id="id_phone_number_hirer" value="{{ user_hirer.user.phone_number }}"
+                readonly>
+        </div>
+        <button id="sub" type="submit" style="display: none;">Save</button>
+
+
+        <!-- Display Job Seeker profile fields -->
+        {% elif user_job_seeker %}        
+        <div class="item">
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" id="id_username" value="{{ user_job_seeker.user.username }}" readonly>
+            <div>
+                {% if error %}
+                <br><span style="color: red;">{{ error }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="item">
+            <label for="id_name">Name:</label>
+            <input type="text" name="name" id="id_name" value="{{ user_job_seeker.user.name }}"
+                readonly>
+        </div>
+
+        {% comment %}  
+        <!-- <div class="item">
+            <img src="{{user_job_seeker.user.profile_img.url}}" height="150px" width="150px" alt="{{user_job_seeker.user.username}} Profile Picture">
+        </div> -->
+        <!-- <div class="item">
+            <label for="last_name">Second Name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ user_job_seeker.user.last_name }}" readonly>
+        </div> -->
+        {% endcomment %}
+
+        <div class="item">
+            <label for="id_email">Email:</label>
+            <input type="text" name="email" id="id_email" value="{{ user_job_seeker.user.email }}" readonly>
+        </div>
+        <div class="item">
+            <label for="id_phone_number">Phone Number:</label>
+            <input type="text" name="phone_number" id="id_phone_number" value="{{ user_job_seeker.user.phone_number }}"
+                readonly>
+        </div>
+        <button id="sub" type="submit" style="display: none;">Save</button>
+
+        <!-- Display other profile fields -->
+        {% else %}
+        <p>No profile data available.</p>
+        {% endif %}
+
+        <div class="btn">
+            <a href="{% url 'update_profile' %}"><button>Edit</button></a>
+            <a href="{% url 'home' %}"><button>Home</button></a>
+        </div>
+    </div>
+</body>
+
+</html>

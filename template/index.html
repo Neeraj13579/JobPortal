@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg'' %}" type="image/x-icon">
+</head>
+
+<body>
+    <nav>
+        <div class="left">
+            <p>Job<span>Portal</span></p>
+        </div>
+        <div class="right">
+            <div class="menu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#review">Review</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="sub-menu">
+                <ul>
+                    {% if user.is_hirer %}
+                    <li><a href="#" id="post" class="job-btn">My Post</a></li>
+                    <li><a href="{% url 'profile' %}" title="Account" id="account"><i class="fa-regular fa-circle-user"></i>{{user.username}}</a></li>
+                    
+
+                    {% elif user.is_jobseeker %}
+                    <li><a href="#" id="search" class="job-btn">Search Job</a></li>
+                    <li><a href="{% url 'profile' %}" title="Account" id="account"><i class="fa-regular fa-circle-user"></i>{{user.username}}</a></li>
+                    
+                    {% else %}
+                    <li><a href="{% url 'register' %}">Sign up</a></li>
+                    <li><a href="{% url 'login' %}" id="login">Login</a></li>
+                    {% endif %} 
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h1>Welcome</h1>
+
+{% if user.is_authenticated %}
+    {% comment %} <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a> <br>  {% endcomment %}
+    <a href="{% url 'profile' %}">Profile</a> <br>
+    <a href="{% url 'logout' %}">Logout</a> <br>
+{% else %}
+    <a href="{% url 'register' %}">Register</a> <br>
+    <a href="{% url 'login' %}">Login</a> 
+{% endif %} -->

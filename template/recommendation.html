@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Jobs | JobPortal</title>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/recommendation.css' %}">
+</head>
+
+<body>
+    {% include "nav.html" %}
+    {% include "searchBox.html" %}
+
+    <div class="container">
+        <div class="hero-content">
+            {% for item in recommended_jobs %}
+            <div class="hero-box">
+                <a href="{% url 'view-post' item.id %}">
+                    <div class="box">
+                        <span class="text-recommend"><i class="fa-solid fa-star"></i> Recommended Job</span>
+                        <div class="box-head">
+                            <div class="box-title">
+                                <h3>{{item.title}}</h3>
+                                <h5>{{item.hirer.company_name}}</h5>
+                            </div>
+                            <div class="box-img">
+                                <img src="{{item.hirer.profile_image.url}}" alt="Compnay Image">
+                            </div>
+                        </div>
+                        <div class="box-list">
+                            <div class="box-list-top">
+                                <span><i class="fa-solid fa-briefcase"></i> {{item.experience}}</span>
+                                <span class="rupee"><i class="fa-solid fa-indian-rupee-sign"></i> {{item.salary}}</span>
+                                <span><i class="fa-solid fa-location-dot"></i> {{item.location}}</span>
+                            </div>
+                            <div class="box-list-bottom">
+                                <span><i class="fa-solid fa-newspaper"></i> {{item.role}}</span>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <span class="skills">{{item.skills_requirement}}</span>
+                        </div>
+                </a>
+                <div class="box-end">
+                    <span>{{item.created_at|timesince }} ago</span>
+                    <div class="box-btn">
+                        {% comment %}
+                        {% if item in user_job_seeker.saved_posts.all %}
+                        <a href="{% url 'unsave-post' item.id %}"><span class="unsave"><i
+                                    class="fa-solid fa-bookmark"></i>
+                                Unsave</span></a>
+                        {% else %}
+                        <a href="{% url 'save-post' item.id %}"><span class="save"><i
+                                    class="fa-regular fa-bookmark"></i>
+                                Save</span></a>
+                        {% endif %}
+                        {% endcomment %}
+                        {% if item in user_job_seeker.saved_posts.all %}
+                        <span data-post-id="{{item.id}}" class="unsave save-unsave-button"><i
+                                class="fa-solid fa-bookmark"></i>
+                            Unsave</span>
+                        {% else %}
+                        <span data-post-id="{{item.id}}" class="save save-unsave-button"><i
+                                class="fa-regular fa-bookmark"></i>
+                            Save</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

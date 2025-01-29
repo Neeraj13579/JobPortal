@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Job Portal | User Profile | Hirer | {{user_hirer.user.username}}</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'img/favicon-bg.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href='{% static "css/jobSeekerProfile.css" %}'>
+    <link rel="stylesheet" href='{% static "css/hirerProfile.css" %}'>
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    <div class="container">
+        {% if user_hirer %}
+        <div class="profile-card">
+            <div class="image">
+                <form id="profileImgForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <img id="profile-img" src={{user_hirer.profile_image.url}} alt="Profile Image" width="230"
+                        height="230">
+                </form>
+            </div>
+            <p id="fullnameDisplay">{{ user_hirer.user.name }}</p>
+            <p id="usernameDisplay">@{{ user_hirer.user.username }}</p>
+            {% if user_hirer_address %}
+            <p id="locationDisplay"><i class="fa-solid fa-location-dot"></i> {{ user_hirer_address.country }}</p>
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <div class="menuRadio">
+                <input type="radio" name="menu" id="companyDetails" checked>
+                <label for="companyDetails">Company Details</label>
+                <input type="radio" name="menu" id="companyAddress">
+                <label for="companyAddress">Address</label>
+            </div>
+            <div id="hirerCompanyData">
+                <table>
+                    <tr>
+                        <th><label for="id_hirer_name">Name</label></th>
+                        <td><input class="profileForm nobg" type="text" name="name" id="id_hirer_name"
+                                value="{{ user_hirer.user.name }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_hirer_username">Username</label></th>
+                        <td>
+                            <input class="profileForm nobg" type="text" name="username" id="id_hirer_username"
+                                value="{{ user_hirer.user.username }}" disabled>
+                            {% if error %}
+                            <br><span style="color: red;">{{ error }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_hirer_company_name">Company Name</label></th>
+                        <td><input class="profileForm nobg" type="text" name="company_name" id="id_hirer_company_name"
+                                value="{{ user_hirer.company_name }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_hirer_email">Email</label></th>
+                        <td><input class="profileForm nobg" type="email" name="email" id="id_hirer_email"
+                                value="{{ user_hirer.user.email }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_hirer_phone_number">Mobile</label></th>
+                        <td><input class="profileForm nobg" type="text" name="phone_number" id="id_hirer_phone_number"
+                                value="{{ user_hirer.user.phone_number }}" disabled></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="hirerAddressData">
+                <table>
+                    <tr>
+                        <th><label for="id_street_address">Street</label></th>
+                        <td><input class="addressForm nobg" type="text" name="street_address" id="id_street_address"
+                                value="{{ user_hirer_address.street_address }}" disabled></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_city">City</label></th>
+                        <td><input class="addressForm nobg" type="text" name="city" id="id_city"
+                                value="{{ user_hirer_address.city }}" disabled required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_state">State</label></th>
+                        <td><input class="addressForm nobg" type="text" name="state" id="id_state"
+                                value="{{ user_hirer_address.state }}" disabled required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_postal_code">Postal Code</label></th>
+                        <td><input class="addressForm nobg" type="number" name="postal_code" id="id_postal_code"
+                                value="{{ user_hirer_address.postal_code }}" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="id_country">Country</label></th>
+                        <td><input class="addressForm nobg" type="text" name="country" id="id_country"
+                                value="{{ user_hirer_address.country }}" disabled required></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        {% else %}
+        <p>No profile data available.</p>
+        {% endif %}
+    </div>
+
+    {% include "footer.html" %}
+
+
+    {% load static %}
+    <script src="{% static 'js/hirerProfile.js' %}"></script>
+    <script src="https://kit.fontawesome.com/437000937b.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
