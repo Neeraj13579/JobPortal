@@ -3,10 +3,11 @@
 > **Abstract** : JobPortal is an innovative web application aimed at connecting job seekers and hirers seamlessly. Built using Django, HTML, CSS, and JavaScript with AJAX, it offers a user-friendly interface. The platform operates on a two-user model - job seekers and hirers. Hirers can post job applications upon completing their profiles to 100%, stored in an SQLite3 database. Job seekers with 100% completed profiles can view and apply for these listings. Notably, JobPortal facilitates real-time communication, instantly notifying hirers of applications and job seekers of responses. The platform also features filters, a search bar, and an advanced recommendation algorithm to enhance the job-seeking experience. In essence, JobHub is a dynamic Django project that leverages modern web technologies to simplify job search and hiring, fostering connections, real-time notifications, and intelligent job recommendations.
 
 ### Project Members
-1. NAIK MOIN MOHAMMED  [ Team Leader ] 
-2. SHAIKH RAFAT MUSKAN MOHD KAMREALAM 
-3. PATEL SAQUIB MANSOOR 
-4. KUMAR NEERAJ ARVIND 
+1. KUMAR NEERAJ ARVIND
+2. NAIK MOIN MOHAMMED  [ Team Leader ] 
+3. SHAIKH RAFAT MUSKAN MOHD KAMREALAM 
+4. PATEL SAQUIB MANSOOR 
+   
 
 ### Project Guides
 1. PROF. RAMYA KANAGARAJ   [ Primary Guide ] 
